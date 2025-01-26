@@ -10,13 +10,15 @@
    <meta property="og:url"           content="http://d-9.cc" />
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content="d-9" />
-    <meta property="og:image" content="/img/banner.jpg">
+    <meta property="og:image" content="https://d-9.cc/img/banner.jpg">
     <meta name="twitter:site" content="d-9.cc">
 <meta name="twitter:title" content="d-9.cc">
 <meta name="twitter:description" content="d-9">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image:src" content="/img/banner.jpg">
+<meta name="twitter:image:src" content="https://d-9.cc/img/banner.jpg">
 <meta name="theme-color" content="#FD0054">
+
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,14 +56,71 @@
         a:hover {
             color: #adb0b4;
         }
+        #play-pause-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+        }
+        #play-pause-btn img {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
-    <h1>path</h1>
+    <h1>d-9</h1>
     <ul>
         <li><a href="/e" target="_blank">ecco2k - e</a></li>
         <li><a href="/ti" target="_blank">trash island</a></li>
         
     </ul>
+
+    <button id="play-pause-btn">
+        <img id="play-pause-icon" src="img/play.png" alt="Play">
+    </button>
+
+    <audio id="background-music">
+        <source id="audio-source" src="songs/song1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const audio = document.getElementById('background-music');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playPauseIcon = document.getElementById('play-pause-icon');
+        const audioSource = document.getElementById('audio-source');
+
+        const songs = ['songs/song1.mp3', 'songs/song2.mp3', 'songs/song3.mp3', 'songs/song4.mp3', 'songs/song5.mp3'];
+        let currentSongIndex = 0;
+        let isPlaying = false;
+
+        audio.volume = 0.5;
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseIcon.src = 'img/play.png'; 
+                isPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    playPauseIcon.src = 'img/pause.png'; 
+                    isPlaying = true;
+                }).catch(error => console.error('Error playing audio:', error));
+            }
+        });
+
+        
+        audio.addEventListener('ended', () => {
+            currentSongIndex = (currentSongIndex + 1) % songs.length; 
+            audioSource.src = songs[currentSongIndex];
+            audio.load();
+            audio.play().catch(error => console.error('Error playing audio:', error));
+        });
+    </script>
 </body>
 </html>
