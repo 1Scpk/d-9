@@ -18,7 +18,6 @@
 <meta name="twitter:image:src" content="https://d-9.cc/img/banner.jpg">
 <meta name="theme-color" content="#FD0054">
 
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,19 +55,32 @@
         a:hover {
             color: #adb0b4;
         }
-        #play-pause-btn {
+        #control-container {
             position: fixed;
             top: 20px;
             left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .control-btn {
             background-color: transparent;
             border: none;
             cursor: pointer;
             width: 40px;
             height: 40px;
         }
-        #play-pause-btn img {
+        .control-btn img {
             width: 100%;
             height: auto;
+        }
+        #song-info {
+            font-size: 14px;
+            color: #555;
+        }
+        #current-time {
+            font-weight: bold;
+            color: #000;
         }
     </style>
 </head>
@@ -80,9 +92,23 @@
         
     </ul>
 
-    <button id="play-pause-btn">
-        <img id="play-pause-icon" src="img/play.png" alt="Play">
-    </button>
+    <div id="control-container">
+        <button id="previous-btn" class="control-btn">
+            <img src="img/previous.png" alt="Previous">
+        </button>
+
+        <button id="play-pause-btn" class="control-btn">
+            <img id="play-pause-icon" src="img/play.png"Play">
+        </button>
+
+        <button id="next-btn" class="control-btn">
+            <img src="img/next.png" alt="Next">
+        </button>
+
+        <div id="song-info">
+            <span id="song-name">None</span> - <span id="current-time">0:00</span>
+        </div>
+    </div>
 
     <audio id="background-music">
         <source id="audio-source" src="songs/song1.mp3" type="audio/mpeg">
@@ -93,9 +119,19 @@
         const audio = document.getElementById('background-music');
         const playPauseBtn = document.getElementById('play-pause-btn');
         const playPauseIcon = document.getElementById('play-pause-icon');
+        const previousBtn = document.getElementById('previous-btn');
+        const nextBtn = document.getElementById('next-btn');
         const audioSource = document.getElementById('audio-source');
+        const songNameElement = document.getElementById('song-name');
+        const currentTimeElement = document.getElementById('current-time');
 
-        const songs = ['songs/song1.mp3', 'songs/song2.mp3', 'songs/song3.mp3', 'songs/song4.mp3', 'songs/song5.mp3'];
+        const songs = [
+            { name: 'tldr', file: 'songs/song1.mp3' },
+            { name: 'romeo', file: 'songs/song2.mp3' },
+            { name: 'flatline', file: 'songs/song3.mp3' },
+            { name: '1:1', file: 'songs/song4.mp3' },
+            { name: '5 star crest', file: 'songs/song5.mp3' }
+        ];
         let currentSongIndex = 0;
         let isPlaying = false;
 
@@ -114,13 +150,47 @@
             }
         });
 
-        
-        audio.addEventListener('ended', () => {
-            currentSongIndex = (currentSongIndex + 1) % songs.length; 
-            audioSource.src = songs[currentSongIndex];
-            audio.load();
-            audio.play().catch(error => console.error('Error playing audio:', error));
+        // Play the previous song
+        previousBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length; 
+            loadCurrentSong();
+            if (isPlaying) {
+                audio.play().catch(error => console.error('Error playing audio:', error));
+            }
         });
+
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % songs.length; 
+            loadCurrentSong();
+            if (isPlaying) {
+                audio.play().catch(error => console.error('Error playing audio:', error));
+            }
+        });
+
+        function loadCurrentSong() {
+            const currentSong = songs[currentSongIndex];
+            audioSource.src = currentSong.file;
+            songNameElement.textContent = currentSong.name;
+            audio.load();
+        }
+
+        function updateSongInfo() {
+            const minutes = Math.floor(audio.currentTime / 60);
+            const seconds = Math.floor(audio.currentTime % 60);
+            currentTimeElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function init() {
+            loadCurrentSong();
+        }
+
+        audio.addEventListener('timeupdate', updateSongInfo);
+
+        audio.addEventListener('ended', () => {
+            nextBtn.click(); 
+        });
+
+        init();
     </script>
 </body>
 </html>
