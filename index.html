@@ -123,10 +123,9 @@
   <div id="main-content">
     <h1>d-9</h1>
     <ul>
-      <li><a href="/e" target="_blank">ecco2k - e</a></li>
-      <li><a href="/ti" target="_blank">trash island</a></li>
-      <li><a href="/store" target="_blank">store</a></li>
-      <li><a href="/" target="_blank">UNSEEN</a></li>
+      <li><a href="/e" target="_blank">E</a></li>
+      <li><a href="/ti" target="_blank">Trash Island</a></li>
+      <li><a href="/store" target="_blank">Store</a></li>
     </ul>
   </div>
 
@@ -140,60 +139,57 @@
   </audio>
 
   <script>
-    const enterScreen = document.getElementById("enter-screen");
-    const mainContent = document.getElementById("main-content");
-    const audio = document.getElementById("autoplay-audio");
-    const volumeControl = document.getElementById("volume-control");
-    const volumeSlider = document.getElementById("volume-slider");
-    const audioSource = document.getElementById("audio-source");
+  const enterScreen = document.getElementById("enter-screen");
+  const mainContent = document.getElementById("main-content");
+  const audio = document.getElementById("autoplay-audio");
+  const volumeControl = document.getElementById("volume-control");
+  const volumeSlider = document.getElementById("volume-slider");
+  const audioSource = document.getElementById("audio-source");
 
-    const songs = [
-      "songs/song1.mp3",
-      "songs/song2.mp3",
-      "songs/song3.mp3",
-      "songs/song4.mp3",
-      "songs/song5.mp3"
-    ];
+  const songs = [
+    "songs/song1.mp3",
+    "songs/song2.mp3",
+    "songs/song3.mp3",
+    "songs/song4.mp3",
+    "songs/song5.mp3"
+  ];
 
-    let currentSongIndex = 0;
+  let currentSongIndex = 0;
 
-    function loadAndPlaySong(index) {
-      audioSource.src = songs[index];
-      audio.load();
-      audio.play().catch(() => {});
-    }
-
-    function playMusicWithFadeIn() {
-      let volume = 0;
-      audio.muted = false;
-      audio.volume = 0;
-      loadAndPlaySong(currentSongIndex);
-
-      const fade = setInterval(() => {
-        if (volume < parseFloat(volumeSlider.value)) {
-          volume += 0.01;
-          audio.volume = volume;
-        } else {
-          clearInterval(fade);
-        }
-      }, 100);
-    }
-
-    enterScreen.addEventListener("click", () => {
-      enterScreen.classList.add("hidden");
-      mainContent.classList.add("visible");
-      volumeControl.style.display = "block";
-      playMusicWithFadeIn();
+  function loadAndPlaySong(index) {
+    audioSource.src = songs[index];
+    audio.load();
+    audio.play().catch((e) => {
+      console.log("Playback blocked:", e);
     });
+  }
 
-    volumeSlider.addEventListener("input", () => {
-      audio.volume = parseFloat(volumeSlider.value);
-    });
+  function playMusic() {
+    audio.muted = false;
+    audio.volume = parseFloat(volumeSlider.value);
+    loadAndPlaySong(currentSongIndex);
+  }
 
-    audio.addEventListener("ended", () => {
-      currentSongIndex = (currentSongIndex + 1) % songs.length;
-      loadAndPlaySong(currentSongIndex);
-    });
-  </script>
+  enterScreen.addEventListener("click", () => {
+    enterScreen.classList.add("hidden");
+    mainContent.classList.add("visible");
+    volumeControl.style.display = "block";
+
+    
+    setTimeout(() => {
+      playMusic();
+    }, 100);
+  });
+
+  volumeSlider.addEventListener("input", () => {
+    const vol = parseFloat(volumeSlider.value);
+    audio.volume = vol;
+  });
+
+  audio.addEventListener("ended", () => {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    loadAndPlaySong(currentSongIndex);
+  });
+</script>
 </body>
 </html>
