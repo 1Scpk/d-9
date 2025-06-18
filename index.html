@@ -1,211 +1,199 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>‎ </title>
-    
-    <link rel="icon" href="img/icon.png" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>‎ </title>
 
-    <meta property="og:url" content="http://d-9.cc" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="d-9" />
-    <meta property="og:image" content="https://d-9.cc/img/banner.jpg">
-    <meta name="twitter:site" content="d-9.cc">
-    <meta name="twitter:title" content="d-9.cc">
-    <meta name="twitter:description" content="d-9">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image:src" content="https://d-9.cc/img/banner.jpg">
-    <meta name="theme-color" content="#FD0054">
+  <link rel="icon" href="img/icon.png" type="image/png" />
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-        }
-        h1 {
-            font-size: 36px;
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 20px;
-            color: #444;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        li {
-            margin: 15px 0;
-        }
-        a {
-            text-decoration: none;
-            color: #000000;
-            font-size: 20px;
-            transition: color 0.3s ease;
-        }
-        a:hover {
-            color: #adb0b4;
-        }
-        #control-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .control-btn {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-        }
-        .control-btn img {
-            width: 100%;
-            height: auto;
-        }
-        #song-info {
-            font-size: 14px;
-            color: #555;
-            display: flex;
-            flex-direction: row;
-            gap: 5px;
-        }
-        #current-time {
-            font-weight: bold;
-            color: #000;
-        }
+  <meta property="og:url" content="http://d-9.cc" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="d-9" />
+  <meta property="og:image" content="https://d-9.cc/img/banner.jpg" />
+  <meta name="twitter:site" content="d-9.cc" />
+  <meta name="twitter:title" content="d-9.cc" />
+  <meta name="twitter:description" content="d-9" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image:src" content="https://d-9.cc/img/banner.jpg" />
+  <meta name="theme-color" content="#FD0054" />
 
-        @media (max-width: 768px) { 
-            #control-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-            #song-info {
-                flex-direction: column;
-                margin-top: 5px;
-                align-items: flex-start;
-            }
-        }
-    </style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #enter-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      transition: opacity 0.8s ease;
+      cursor: pointer;
+    }
+
+    #enter-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #enter-text {
+      font-size: 28px;
+      text-transform: lowercase;
+      letter-spacing: 2px;
+    }
+
+    #main-content {
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding-top: 50px;
+      transition: opacity 1s ease;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin: 15px 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #adb0b4;
+    }
+
+    #volume-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 5;
+      display: none;
+    }
+
+    input[type="range"] {
+      width: 100px;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
 </head>
 <body>
+  <div id="enter-screen">
+    <div id="enter-text">enter</div>
+  </div>
+
+  <div id="main-content">
     <h1>d-9</h1>
     <ul>
-        <li><a href="/e" target="_blank">ecco2k - e</a></li>
-        <li><a href="/ti" target="_blank">trash island</a></li>
-        <li><a href="/store" target="_blank">store</a></li>
-        <li><a href="/" target="_blank">UNSEEN</a></li>
+      <li><a href="/e" target="_blank">ecco2k - e</a></li>
+      <li><a href="/ti" target="_blank">trash island</a></li>
+      <li><a href="/store" target="_blank">store</a></li>
+      <li><a href="/" target="_blank">UNSEEN</a></li>
     </ul>
+  </div>
 
-    <div id="control-container">
-        <button id="previous-btn" class="control-btn">
-            <img src="img/previous.png" alt="Previous">
-        </button>
+  <div id="volume-control">
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" />
+  </div>
 
-        <button id="play-pause-btn" class="control-btn">
-            <img id="play-pause-icon" src="img/play.png" alt="Play">
-        </button>
+  <audio id="autoplay-audio" muted>
+    <source id="audio-source" src="songs/song1.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
-        <button id="next-btn" class="control-btn">
-            <img src="img/next.png" alt="Next">
-        </button>
+  <script>
+    const enterScreen = document.getElementById("enter-screen");
+    const mainContent = document.getElementById("main-content");
+    const audio = document.getElementById("autoplay-audio");
+    const volumeControl = document.getElementById("volume-control");
+    const volumeSlider = document.getElementById("volume-slider");
+    const audioSource = document.getElementById("audio-source");
 
-        <div id="song-info">
-            <span id="song-name">None</span>  <span id="current-time">0:00</span>
-        </div>
-    </div>
+    const songs = [
+      "songs/song1.mp3",
+      "songs/song2.mp3",
+      "songs/song3.mp3",
+      "songs/song4.mp3",
+      "songs/song5.mp3"
+    ];
 
-    <audio id="background-music">
-        <source id="audio-source" src="songs/song1.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    let currentSongIndex = 0;
 
-    <script>
-        const audio = document.getElementById('background-music');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playPauseIcon = document.getElementById('play-pause-icon');
-        const previousBtn = document.getElementById('previous-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const audioSource = document.getElementById('audio-source');
-        const songNameElement = document.getElementById('song-name');
-        const currentTimeElement = document.getElementById('current-time');
+    function loadAndPlaySong(index) {
+      audioSource.src = songs[index];
+      audio.load();
+      audio.play().catch(() => {});
+    }
 
-        const songs = [
-            { name: 'tldr', file: 'songs/song1.mp3' },
-            { name: 'im fresh', file: 'songs/song2.mp3' },
-            { name: 'flatline', file: 'songs/song3.mp3' },
-            { name: 'legendary member', file: 'songs/song4.mp3' },
-            { name: '5 star crest', file: 'songs/song5.mp3' }
-        ];
-        let currentSongIndex = 0;
-        let isPlaying = false;
+    function playMusicWithFadeIn() {
+      let volume = 0;
+      audio.muted = false;
+      audio.volume = 0;
+      loadAndPlaySong(currentSongIndex);
 
-        audio.volume = 0.5;
-
-        playPauseBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                audio.pause();
-                playPauseIcon.src = 'img/play.png'; 
-                isPlaying = false;
-            } else {
-                audio.play().then(() => {
-                    playPauseIcon.src = 'img/pause.png'; 
-                    isPlaying = true;
-                }).catch(error => console.error('Error playing audio:', error));
-            }
-        });
-
-        previousBtn.addEventListener('click', () => {
-            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length; 
-            loadCurrentSong();
-            if (isPlaying) {
-                audio.play().catch(error => console.error('Error playing audio:', error));
-            }
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentSongIndex = (currentSongIndex + 1) % songs.length; 
-            loadCurrentSong();
-            if (isPlaying) {
-                audio.play().catch(error => console.error('Error playing audio:', error));
-            }
-        });
-
-        function loadCurrentSong() {
-            const currentSong = songs[currentSongIndex];
-            audioSource.src = currentSong.file;
-            songNameElement.textContent = currentSong.name;
-            audio.load();
+      const fade = setInterval(() => {
+        if (volume < parseFloat(volumeSlider.value)) {
+          volume += 0.01;
+          audio.volume = volume;
+        } else {
+          clearInterval(fade);
         }
+      }, 100);
+    }
 
-        function updateSongInfo() {
-            const minutes = Math.floor(audio.currentTime / 60);
-            const seconds = Math.floor(audio.currentTime % 60);
-            currentTimeElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
+    enterScreen.addEventListener("click", () => {
+      enterScreen.classList.add("hidden");
+      mainContent.classList.add("visible");
+      volumeControl.style.display = "block";
+      playMusicWithFadeIn();
+    });
 
-        function init() {
-            loadCurrentSong();
-        }
+    volumeSlider.addEventListener("input", () => {
+      audio.volume = parseFloat(volumeSlider.value);
+    });
 
-        audio.addEventListener('timeupdate', updateSongInfo);
-
-        audio.addEventListener('ended', () => {
-            nextBtn.click(); 
-        });
-
-        init();
-    </script>
+    audio.addEventListener("ended", () => {
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      loadAndPlaySong(currentSongIndex);
+    });
+  </script>
 </body>
 </html>
