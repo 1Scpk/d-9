@@ -97,22 +97,6 @@
     a:hover {
       color: #adb0b4;
     }
-
-    #volume-control {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 5;
-      display: none;
-    }
-
-    input[type="range"] {
-      width: 100px;
-    }
-
-    audio {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -129,67 +113,14 @@
     </ul>
   </div>
 
-  <div id="volume-control">
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" />
-  </div>
-
-  <audio id="autoplay-audio" muted>
-    <source id="audio-source" src="songs/song1.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
-  </audio>
-
   <script>
-  const enterScreen = document.getElementById("enter-screen");
-  const mainContent = document.getElementById("main-content");
-  const audio = document.getElementById("autoplay-audio");
-  const volumeControl = document.getElementById("volume-control");
-  const volumeSlider = document.getElementById("volume-slider");
-  const audioSource = document.getElementById("audio-source");
+    const enterScreen = document.getElementById("enter-screen");
+    const mainContent = document.getElementById("main-content");
 
-  const songs = [
-    "songs/song1.mp3",
-    "songs/song2.mp3",
-    "songs/song3.mp3",
-    "songs/song4.mp3",
-    "songs/song5.mp3"
-  ];
-
-  let currentSongIndex = 0;
-
-  function loadAndPlaySong(index) {
-    audioSource.src = songs[index];
-    audio.load();
-    audio.play().catch((e) => {
-      console.log("Playback blocked:", e);
+    enterScreen.addEventListener("click", () => {
+      enterScreen.classList.add("hidden");
+      mainContent.classList.add("visible");
     });
-  }
-
-  function playMusic() {
-    audio.muted = false;
-    audio.volume = parseFloat(volumeSlider.value);
-    loadAndPlaySong(currentSongIndex);
-  }
-
-  enterScreen.addEventListener("click", () => {
-    enterScreen.classList.add("hidden");
-    mainContent.classList.add("visible");
-    volumeControl.style.display = "block";
-
-    
-    setTimeout(() => {
-      playMusic();
-    }, 100);
-  });
-
-  volumeSlider.addEventListener("input", () => {
-    const vol = parseFloat(volumeSlider.value);
-    audio.volume = vol;
-  });
-
-  audio.addEventListener("ended", () => {
-    currentSongIndex = (currentSongIndex + 1) % songs.length;
-    loadAndPlaySong(currentSongIndex);
-  });
-</script>
+  </script>
 </body>
 </html>
